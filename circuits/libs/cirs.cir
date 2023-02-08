@@ -1,0 +1,65 @@
+* simple circuits as subckts
+
+.subckt inv in out
+  M1 out in vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 out in gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends inv
+
+.subckt nand2 in1 in2 out
+  * PUN
+  M1 out in1 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 out in2 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M3 out in1 tmp gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M4 tmp in2 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends nand2
+
+.subckt nand3 in1 in2 in3 out
+  * PUN
+  M1 out in1 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 out in2 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M3 out in3 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M4 out  in1 tmp  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M5 tmp  in2 tmp2 gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M6 tmp2 in3 gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends nand3
+
+.subckt nor2 in1 in2 out
+  * PUN
+  M1 out in1 tmp vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 tmp in2 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M3 out in1 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M4 out in2 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends nor2
+
+.subckt nor3 in1 in2 in3 out
+  * PUN
+  M1 out  in1 tmp  vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 tmp  in2 tmp2 vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M3 tmp2 in3 vdd  vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M4 out in1 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M5 out in2 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M6 out in3 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends nor3
+
+.subckt xor2 A B Q
+  X1 A B AB_bar nand2 N={N}
+  X2 A AB_bar tmp1 nand2 N={N}
+  X3 B AB_bar tmp2 nand2 N={N}
+  X4 tmp1 tmp2 Q nand2 N={N}
+.ends xor2
+
+* .subckt tg in out en nen
+*   M1 nen in out vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+*   M2 en  in out gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+* .ends tg
+
+* .subckt latch in out
+*   X0 tg
+*   X1 not
+*   X2 not
+*   X3 tg ?
+* .ends latch

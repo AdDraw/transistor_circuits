@@ -1,0 +1,27 @@
+* simple NOR2 gate
+
+.param supply=1.0
+.temp 70
+.model pmos pmos VTH0='-0.3*supply' level=14
+.model nmos nmos VTH0='0.3*supply' level=14
+
+.global vdd gnd
+.inc libs/cirs.cir
+
+* Vdd
+Vdd vdd 0 'supply'
+* input 1
+Vin1 in1 0 PULSE 0 'supply' .45n 0.05n 0.05n 0.45n 1n
+* input 2
+Vin2 in2 0 PULSE 0 'supply' 1n 0.05n 0.05n 0.9n 2n
+* input 3
+Vin3 in3 0 PULSE 0 'supply' 2n 0.05n 0.05n 1.9n 4n
+
+X1 in1 in2 in3 out nor3 N=20
+X2 out out_bar inv N=20
+
+# load
+C1 out 0 20f
+C2 out_bar 0 20f
+
+.tran 4n
