@@ -141,28 +141,42 @@ A \sdot \overline{B} = A \sdot \overline{B} + B \sdot \overline{B} = \overline{B
 
 ```math
 XOR(A,B) = (A \lor B ) \land (\overline{A} \lor \overline{B}) = \overline{\overline{A \lor B} \lor \overline{\overline{A} \lor \overline{B}}} = \overline{\overline{\overline{A} \land \overline{B}} \lor \overline{\overline{A \land B}}}
-
 ```
 
 ![xor2_mixed.svg](circuits_visual/xor2_mixed.svg)
 
 > size: 20 transistors = 2 x NAND2 + 4 x NOT + 1 x NOR2 = 2 x 4 + 4 x 2 + 1 x 4 = 20
 
-### Optimal transistor implementation
-
+### XOR Transistor Implementation
 
 To generate a XOR we will get:
 
 ```math
-\text{PUN} = (A \sdot \overline{B}) + (\overline{A} \sdot B) \\
-\text{PDN} = \overline{XOR} = XNOR = (A \sdot B) + (\overline{A} \sdot \overline {B})
+\text{Simple implementation (a)}:
+\text{} \\
+\text{XOR but CMOS logic is inverting this means that logic in the PDN has} \\ 
+\text{to be the inversion of the inversion of the XOR to get a XOR and not XNOR at the output} \\
+\text{that means that we have to implement a XNOR logic to the PDN to get a XOR at the output }
+\\
+XNOR = (A * B) + (\bar{A} * \bar{B}), \text{ when implementing this in the PDN we will get } \bar{XNOR} = XOR \\
+PDN = \overline{(A * B) + (\overline{A} * \overline{B})}\\
+\text{PUN can be achieved applying De Morgan's Law to the PDN logic equation } \\
+PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\overline{A} * \overline{B})} } } = \overline{(A * B)} * \overline{(\overline{A} * \overline{B})} = (\overline{A} + \overline{B}) * \overline{\overline{A + B}} = (\overline{A} + \overline{B}) * (A + B)
+\\ \text{}
+\\ \text{Transistor optimal implementation b)}
+\\ \text{In this case since XOR logic is double rail logic, inputs and inverted inputs have to be provided} 
+\\ \text{that means that PUN logic can be written kinda hackypacky}
+\\ \text{PUN} = (A \sdot \overline{B}) + (\overline{A} \sdot B)
+\\ \text{PDN} = \overline{XOR} = XNOR = (A \sdot B) + (\overline{A} \sdot \overline {B})
+\\ \text{Only real requirement is that PUN and PDN logic is not active at the same time, since PUN drives 1 and PDN drives 0 we can take XOR PUN or PDN not as DEMorgan's computed equivalents but as 2 separate equations}
+\\ \text{Option B is better because ??? less Drain capacitance ?? Easier to route?}
 ```
 
 ![xor_tran.svg](circuits_visuals/../circuits_visual/xor_tran.svg)
 
 > size: 12 transistors = 1x8 + 2xNOT = 1x8 + 2x2 = 12
 
-Schematic a) is created as if $\text{PDN} = \overline{XOR} = XNOR(A,B) = (A \sdot B) + (\overline{A} \sdot \overline {B})$ and PUN if we were to create a complementary PUN it would be equal to $\text{PUN} = XOR = (A + B) \sdot (\overline{A} + \overline {B})$. On the other hand b) represents XOR but PUN is taken from usual XOR equation as a sum of products. Logic checks out in b) because all 4 states of input values are covered and are not overlapping.
+Schematic a) is created as if $\text{PDN} = \overline{\overline{XOR}} = \overline{XNOR(A,B)} = (A \sdot B) + (\overline{A} \sdot \overline {B})$ and PUN if we were to create a complementary PUN it would be equal to $\text{PUN} = XOR = (A + B) \sdot (\overline{A} + \overline {B})$. On the other hand b) represents XOR but PUN is taken from usual XOR equation as a sum of products. Logic checks out in b) because all 4 states of input values are covered and are not overlapping.
 
 > Going from a) to b) could be imagined as untwisting a)'s PUN.
 

@@ -45,12 +45,46 @@
   M6 out in3 gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
 .ends nor3
 
-.subckt xor2 A B Q
+.subckt xor2_nand A B Q
   X1 A B AB_bar nand2 N={N}
   X2 A AB_bar tmp1 nand2 N={N}
   X3 B AB_bar tmp2 nand2 N={N}
   X4 tmp1 tmp2 Q nand2 N={N}
-.ends xor2
+.ends xor2_nand
+
+.subckt xor2_nor A B Q
+  X1 A B Q1 nor2 N={N}
+  X2 A Q1 Q2 nor2 N={N}
+  X3 B Q1 Q3 nor2 N={N}
+  X4 Q3 Q2 Q4 nor2 N={N}
+  X5 Q4 Q4 Q nor2 N={N}
+.ends xor2_nor
+
+.subckt xor2_tran A A_bar B B_bar Q
+  * PUN
+  M1 vdd  A     tmp0 vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 vdd  B     tmp0 vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M3 tmp0 A_bar Q    vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M4 tmp0 B_bar Q    vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M5 Q    A     tmp1 gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M6 tmp1 B     gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M7 Q    A_bar tmp2 gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M8 tmp2 B_bar gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends xor2_tran
+
+.subckt xor2_tran_opt A A_bar B B_bar Q
+  * PUN
+  M1 vdd  A     tmp1 vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 tmp1 B_bar Q    vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M3 vdd  A_bar tmp2 vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M4 tmp2 B     Q    vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  * PDN
+  M5 Q    A     tmp3 gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M6 tmp3 B     gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M7 Q    A_bar tmp4 gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M8 tmp4 B_bar gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends xor2_tran_opt
 
 * .subckt tg in out en nen
 *   M1 nen in out vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
