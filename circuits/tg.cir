@@ -1,0 +1,26 @@
+* Transmission Gate
+.param supply=1.0
+.param t_r=10p
+.param t_f=20p
+.temp 70
+.model pmos pmos VTH0='-0.3*supply' level=14
+.model nmos nmos VTH0='0.3*supply' level=14
+
+.global vdd gnd
+.inc libs/cirs.cir
+
+Vdd vdd 0 'supply'
+
+* Voltage sources/ Signal sources
+V1 en  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 5n
+V2 nen 0 PULSE 'supply' 0 0.1n 't_r' 't_f' 1n 5n
+V3 a 0 PULSE 0 'supply' 0.3n 't_r' 't_f' 1n 10n
+
+X0 a q inv N=10
+X1 q q1 en nen tg N=2
+X2 q1 q2 inv N=10
+
+C1 q2 0 10f
+
+.tran 20n
+

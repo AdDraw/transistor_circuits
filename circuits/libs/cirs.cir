@@ -86,14 +86,28 @@
   M8 tmp4 B_bar gnd  gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
 .ends xor2_tran_opt
 
-* .subckt tg in out en nen
-*   M1 nen in out vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
-*   M2 en  in out gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
-* .ends tg
+.subckt tg in out en nen
+  M1 in nen out vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  M2 in en  out gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends tg
 
-* .subckt latch in out
-*   X0 tg
-*   X1 not
-*   X2 not
-*   X3 tg ?
-* .ends latch
+.subckt d_latch d en nen q q_bar
+  X0 d     q  en  nen tg  N={N}
+  X1 q     q_bar        inv N={N}
+  X2 q_bar q2           inv N={N}
+  X3 q2    q3   nen en  tg  N={N}
+.ends d_latch
+
+.subckt ff_r d en nen q
+  * Master (active low)
+  X_master d nen en mq mq_bar d_latch N={N}
+  * Slave (active high)
+  X_slave mq_bar en nen sq q d_latch N={N}
+.ends ff_r
+
+.subckt ff_f d en nen q
+  * Master (active high)
+  X_master d en nen mq mq_bar d_latch N={N}
+  * Slave (active low)
+  X_slave mq_bar nen en sq q d_latch N={N}
+.ends ff_f
