@@ -1,0 +1,24 @@
+* Multiplexer 2:1
+.param supply=1.0
+.param t_r=10p
+.param t_f=20p
+.temp 70
+.model pmos pmos VTH0='-0.3*supply' level=14
+.model nmos nmos VTH0='0.3*supply' level=14
+
+.global vdd gnd
+.inc libs/cirs.cir
+
+Vdd vdd 0 'supply'
+
+V1 s  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 2.5n 5n
+
+V3 a 0 'supply'
+V4 b 0 0
+
+X0 a b s q MUX21 N=100
+
+
+C0 q 0 10f
+
+.tran 10n

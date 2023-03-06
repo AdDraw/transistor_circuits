@@ -15,13 +15,66 @@ Vdd vdd 0 'supply'
 V1 en  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 5n
 V2 nen 0 PULSE 'supply' 0 0.1n 't_r' 't_f' 1n 5n
 V3 a 0 PULSE 0 'supply' 0.3n 't_r' 't_f' 1n 2n
+V4 s 0 PULSE 0 'supply' 0 't_r' 't_f' 9n 19n
 
-X0 a q inv N=10
-X1 q en nen q1 q1_bar d_latch N=2
-X2 q1 q2 inv N=10
-X3 q1_bar q2_bar inv N=10
+X0 a a_buf buf N=100
 
-C1 q2 0 10f
-C2 q2_bar 0 10f
+X1 a_buf en nen   q1 q1_bar d_latch N=10
+X2 a_buf s en nen q2 q2_bar d_latch_with_async_reset_active_low N=10
+X7 a_buf s en nen q3 q3_bar d_latch_with_async_set_active_high  N=10
+* SET ACTIVE HIGH
+X99  a_buf q4 q4_bar en nen  s vdd d_latch_async_ctrl_active_high N=10
+*RESET ACTIVE HIGH
+X100 a_buf q5 q5_bar en nen  s gnd d_latch_async_ctrl_active_high N=10
+*SET ACTIVE LOW
+X101 a_buf q6 q6_bar en nen s vdd d_latch_async_ctrl_active_low  N=10
+*RESET ACTIVE LOW
+X102 a_buf q7 q7_bar en nen s gnd d_latch_async_ctrl_active_low  N=10
+
+*BUFFERS
+
+X3 q1 q1_buf         buf N=10
+X4 q1_bar q1_bar_buf buf N=10
+
+X5 q2 q2_buf         buf N=10
+X6 q2_bar q2_bar_buf buf N=10
+
+X8 q3 q3_buf         buf N=10
+X9 q3_bar q3_bar_buf buf N=10
+
+X50 q4 q4_buf         buf N=10
+X51 q4_bar q4_bar_buf buf N=10
+
+X52 q5 q5_buf         buf N=10
+X53 q5_bar q5_bar_buf buf N=10
+
+X54 q6 q6_buf         buf N=10
+X55 q6_bar q6_bar_buf buf N=10
+
+X56 q7 q7_buf         buf N=10
+X57 q7_bar q7_bar_buf buf N=10
+
+* CONDENSATORS
+
+C1 q1_buf 0 10f
+C2 q1_bar_buf 0 10f
+
+C3 q2 0 10f
+C4 q2_bar_buf 0 10f
+
+C5 q3 0 10f
+C6 q3_bar_buf 0 10f
+
+C7 q4 0 10f
+C8 q4_bar_buf 0 10f
+
+C9 q5 0 10f
+C10 q5_bar_buf 0 10f
+
+C11 q6 0 10f
+C12 q6_bar_buf 0 10f
+
+C13 q7 0 10f
+C14 q7_bar_buf 0 10f
 
 .tran 20n

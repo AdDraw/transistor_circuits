@@ -5,6 +5,11 @@
   M2 out in gnd gnd nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
 .ends inv
 
+.subckt buf in out
+  X0 in     in_bar inv N={N}
+  X1 in_bar out    inv N={N}
+.ends buf
+
 .subckt nand2 in1 in2 out
   * PUN
   M1 out in1 vdd vdd pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
@@ -92,11 +97,47 @@
 .ends tg
 
 .subckt d_latch d en nen q q_bar
-  X0 d     q  en  nen tg  N={N}
-  X1 q     q_bar        inv N={N}
-  X2 q_bar q2           inv N={N}
-  X3 q2    q3   nen en  tg  N={N}
+  X0 d     q     en  nen tg  N={N}
+  X1 q     q_bar         inv N={N}
+  X2 q_bar q2            inv N={N}
+  X3 q2    q     nen en  tg  N={N}
 .ends d_latch
+
+.subckt d_latch_with_async_reset_active_low d r en nen q q_bar
+  X0 d r norq nand2       N={N}
+  X1 norq q en nen tg     N={N}
+  X2 q q_bar inv          N={N}
+  X3 q_bar r norq2 nand2  N={N}
+  X4 norq2 q nen en tg    N={N}
+.ends d_latch_with_async_reset_active_low
+
+.subckt d_latch_with_async_set_active_high d s en nen q q_bar
+  X0 d s norq nor2        N={N}
+  X1 norq q en nen tg     N={N}
+  X2 q q_bar inv          N={N}
+  X3 q_bar s norq2 nor2   N={N}
+  X4 norq2 q nen en tg    N={N}
+.ends d_latch_with_async_set_active_high
+
+.subckt d_latch_async_ctrl_active_high d q q_bar en nen ctrl z
+  * z- if 1 then SET, 0 - RESET
+  Xmux0 d z ctrl mux0out mux21 N={N}
+  Xtg0  mux0out q en nen tg N={N}
+  Xinv0 q q_bar inv N={N}
+  Xinv1 q_bar tmp inv N={N}
+  Xmux1 tmp z ctrl mux1out mux21 N={N}
+  Xtg1  mux1out q nen en tg N={N}
+.ends
+
+.subckt d_latch_async_ctrl_active_low d q q_bar en nen ctrl z
+  * z- if 1 then SET, 0 - RESET
+  Xmux0 z d ctrl mux0out mux21 N={N}
+  Xtg0  mux0out q en nen tg N={N}
+  Xinv0 q q_bar inv N={N}
+  Xinv1 q_bar tmp inv N={N}
+  Xmux1 z tmp ctrl mux1out mux21 N={N}
+  Xtg1  mux1out q nen en tg N={N}
+.ends
 
 .subckt ff_r d en nen q
   * Master (active low)
@@ -111,3 +152,9 @@
   * Slave (active low)
   X_slave mq_bar nen en sq q d_latch N={N}
 .ends ff_f
+
+.subckt MUX21 a b s q
+  Xinv s s_bar inv N={N}
+  X0   a q s_bar s tg N={N}
+  X1   b q s s_bar tg N={N}
+.ends
