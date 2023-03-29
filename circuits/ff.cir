@@ -13,7 +13,7 @@ Vdd vdd 0 'supply'
 V1 en  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 2n
 V2 nen 0 PULSE 'supply' 0 0.1n 't_r' 't_f' 1n 2n
 V3 a 0 PULSE 0 'supply' 0.3n 't_r' 't_f' 3n 6n
-V4 s 0 PULSE 0 'supply' 0n 't_r' 't_f' 15n 30n
+V4 sr 0 PULSE 0 'supply' 0n 't_r' 't_f' 15n 30n
 
 * Buffer
 X0 a q_buf buf N=10
@@ -21,15 +21,15 @@ X0 a q_buf buf N=10
 * master-slave ff active rising edge
 X2 q_buf en nen q1 ff_r N=2
 * master-slave ff active rising edge, active low set
-X3 q_buf s en nen q2 ffrls N=2
+X3 q_buf sr en nen q2 ffrls N=2
 * master-slave ff active rising edge, active high reset
-X6 q_buf s en nen q5 ffrhr N=2
+X6 q_buf sr en nen q5 ffrhr N=2
 * master-slave ff active falling edge
 X4 q_buf en nen q3 ff_f N=2
 * master-slave ff active falling edge, active low set
-X5 q_buf s en nen q4 fffls N=2
+X5 q_buf sr en nen q4 fffls N=2
 * master-slave ff active falling edge, active high reset
-X7 q_buf s en nen q6 fffhr N=2
+X7 q_buf sr en nen q6 fffhr N=2
 
 
 C1 q1 0 10f
