@@ -1,17 +1,6 @@
 # CMOS Circuits
 
-## Buffer
-
-```math
-  Q = A
-```
-
-### Truth Table
-
-| A | Q |
-| - | - |
-| 0 | 0 |
-| 1 | 1 |
+Some Transistor Gates + Implementation for deepening my knowledge about transistor gates.
 
 ## NOT/INV
 
@@ -25,6 +14,31 @@ Q = \overline{A}
 | - | - |
 | 0 | 1 |
 | 1 | 0 |
+
+### Transistor Implementation
+
+![img](circuits_visual/inv.svg)
+
+>  there exist alternative implementations of the NOT gate / Inverter gate but this is the smallest in size(and probably also the fastest), other implementations use NAND or NOR gates that have both gate inputs tied to the same driver, this is because both NAND, NOR or XNOR gates are naturally inverting.
+
+## Buffer
+
+```math
+  Q = A
+```
+
+### Truth Table
+
+| A | Q |
+| - | - |
+| 0 | 0 |
+| 1 | 1 |
+
+### Transistor Implementation
+
+![i](circuits_visual/buf.svg)
+
+>  2 inverters back to back, in the end Output is equal to the input, regeneration of the signal happens because output is taken straight from the power rails(VDD/VSS) rather then the input
 
 ## OR2
 
