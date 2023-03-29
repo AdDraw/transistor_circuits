@@ -10,26 +10,32 @@
 Vdd vdd 0 'supply'
 
 * Voltage sources/ Signal sources
-V1 en  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 5n
-V2 nen 0 PULSE 'supply' 0 0.1n 't_r' 't_f' 1n 5n
-V3 a 0 PULSE 0 'supply' 0.3n 't_r' 't_f' 1n 2n
+V1 en  0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 2n
+V2 nen 0 PULSE 'supply' 0 0.1n 't_r' 't_f' 1n 2n
+V3 a 0 PULSE 0 'supply' 0.3n 't_r' 't_f' 3n 6n
+V4 s 0 PULSE 0 'supply' 0n 't_r' 't_f' 15n 30n
 
 * Buffer
-X0 a q inv N=10
-X1 q q_buf inv N=10
+X0 a q_buf buf N=10
 
 * master-slave ff active rising edge
 X2 q_buf en nen q1 ff_r N=2
+* master-slave ff active rising edge, active low set
+X3 q_buf s en nen q2 ffrls N=2
+* master-slave ff active rising edge, active high reset
+X6 q_buf s en nen q5 ffrhr N=2
 * master-slave ff active falling edge
-X3 q_buf en nen q2 ff_f N=2
+X4 q_buf en nen q3 ff_f N=2
+* master-slave ff active falling edge, active low set
+X5 q_buf s en nen q4 fffls N=2
+* master-slave ff active falling edge, active high reset
+X7 q_buf s en nen q6 fffhr N=2
 
-* * Output Buffers
-* X4 q1 q1_bar inv N=10
-* X5 q1_bar q1_buf inv N=10
-* X6 q2 q2_bar inv N=10
-* X7 q2_bar q2_buf inv N=10
 
 C1 q1 0 10f
 C2 q2 0 10f
-
-.tran 20n
+C3 q3 0 10f
+C4 q4 0 10f
+C5 q5 0 10f
+C6 q6  0 10f
+.tran 30n

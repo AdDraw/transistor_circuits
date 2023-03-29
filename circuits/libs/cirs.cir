@@ -103,6 +103,35 @@
   X3 q2    q     nen en  tg  N={N}
 .ends d_latch
 
+
+.subckt d_latch_alt1 d s en nen q q_bar
+  X0 d     q     en  nen tg  N={N}
+  X1 q     q_bar         inv N={N}
+  X2 s q_bar q2          nand2 N={N}
+  X3 q2    q     nen en  tg  N={N}
+.ends d_latch_alt1
+
+.subckt d_latch_alt3 d r en nen q q_bar
+  X0 d     q     en  nen tg  N={N}
+  X1 q     q_bar         inv N={N}
+  X2 r q_bar q2          nor2 N={N}
+  X3 q2    q     nen en  tg  N={N}
+.ends d_latch_alt3
+
+.subckt d_latch_alt2 d s en nen q q_bar
+  X0 d  q  en  nen       tg N={N}
+  X1 s q   q_bar         nand2 N={N}
+  X2 q_bar q2            inv N={N}
+  X3 q2    q     nen en  tg  N={N}
+.ends d_latch_alt2
+
+.subckt d_latch_alt4 d r en nen q q_bar
+  X0 d  q  en  nen       tg N={N}
+  X1 r q   q_bar         nor2 N={N}
+  X2 q_bar q2            inv N={N}
+  X3 q2    q     nen en  tg  N={N}
+.ends d_latch_alt4
+
 .subckt d_latch_with_async_reset_active_low d r en nen q q_bar
   X0 d r norq nand2       N={N}
   X1 norq q en nen tg     N={N}
@@ -146,12 +175,41 @@
   X_slave mq_bar en nen sq q d_latch N={N}
 .ends ff_r
 
+.subckt ffrls d s en nen q
+  * Master (active low)
+  X_master d s nen en mq mq_bar d_latch_alt1 N={N}
+  * Slave (active high)
+  X_slave mq_bar s en nen sq q d_latch_alt2 N={N}
+.ends ffrls
+
+.subckt ffrhr d r en nen q
+  * Master (active low)
+  X_master d r nen en mq mq_bar d_latch_alt3 N={N}
+  * Slave (active high)
+  X_slave mq_bar r en nen sq q d_latch_alt4 N={N}
+.ends ffrhr
+
 .subckt ff_f d en nen q
   * Master (active high)
   X_master d en nen mq mq_bar d_latch N={N}
   * Slave (active low)
   X_slave mq_bar nen en sq q d_latch N={N}
 .ends ff_f
+
+.subckt fffls d s en nen q
+  * Master (active high)
+  X_master d s en nen mq mq_bar d_latch_alt1 N={N}
+  * Slave (active low)
+  X_slave mq_bar s nen en sq q d_latch_alt2 N={N}
+.ends fffls
+
+.subckt fffhr d r en nen q
+  * Master (active high)
+  X_master d r en nen mq mq_bar d_latch_alt3 N={N}
+  * Slave (active low)
+  X_slave mq_bar r nen en sq q d_latch_alt4 N={N}
+.ends fffls
+
 
 .subckt MUX21 a b s q
   Xinv s s_bar inv N={N}
