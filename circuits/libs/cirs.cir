@@ -216,3 +216,34 @@
   X0   a q s_bar s tg N={N}
   X1   b q s s_bar tg N={N}
 .ends
+
+
+** XOR3 lib
+.subckt serialp3 a b c top bot body
+  Mpt top  a  tmp1 body pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  Mpm tmp1 b  tmp2 body pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  Mpb tmp2 c  bot  body pmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends
+
+.subckt paralleln3 a b c top bot body
+  Mpt top a bot body nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  Mpm top b bot body nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+  Mpb top c bot body nmos W=100n L=50n AD=0 AS=0 PD=0 PS=0 m={N}
+.ends
+
+.subckt XOR3 a b c q
+  * INPUT INVERTERS
+  Xinv0 a a_bar inv N={N}
+  Xinv1 b b_bar inv N={N}
+  Xinv2 c c_bar inv N={N}
+  * PUN
+  X0 a     b     c_bar vdd q vdd serialp3 N={N}
+  X1 a     b_bar c     vdd q vdd serialp3 N={N}
+  X2 a_bar b     c     vdd q vdd serialp3 N={N}
+  X3 a_bar b_bar c_bar vdd q vdd serialp3 N={N}
+  * PDN
+  X4 a     b     c_bar q    tmp1 gnd paralleln3 N={N}
+  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3 N={N}
+  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3 N={N}
+  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 N={N}
+.ends

@@ -1,0 +1,26 @@
+* XOR3 gate
+.param supply=1.0
+.param t_r=10p
+.param t_f=10p
+.temp 70
+.model pmos pmos VTH0='-0.3*supply' level=14
+.model nmos nmos VTH0='0.3*supply' level=14
+.param N_val=10
+.param Cload=10f
+
+.global vdd gnd
+.inc libs/cirs.cir
+
+* Vdd
+Vdd vdd 0 'supply'
+* inputs
+Vin1 in1 0 PULSE 0 'supply' 0.1n 't_r' 't_f' 1n 2n
+Vin2 in2 0 PULSE 0 'supply' 0.1n 't_r' 't_f' 2n 4n
+Vin3 in3 0 PULSE 0 'supply' 0.1n 't_r' 't_f' 4n 8n
+
+X1 in1 in2 in3 out1 xor3 N='N_val'
+
+# load
+C1 out1 0 'Cload'
+
+.tran 9=10n

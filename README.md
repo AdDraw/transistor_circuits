@@ -19,7 +19,7 @@ Q = \overline{A}
 
 ![img](circuits_visual/inv.svg)
 
->  there exist alternative implementations of the NOT gate / Inverter gate but this is the smallest in size(and probably also the fastest), other implementations use NAND or NOR gates that have both gate inputs tied to the same driver, this is because both NAND, NOR or XNOR gates are naturally inverting.
+> there exist alternative implementations of the NOT gate / Inverter gate but this is the smallest in size(and probably also the fastest), other implementations use NAND or NOR gates that have both gate inputs tied to the same driver, this is because both NAND, NOR or XNOR gates are naturally inverting.
 
 ## Buffer
 
@@ -38,7 +38,7 @@ Q = \overline{A}
 
 ![i](circuits_visual/buf.svg)
 
->  2 inverters back to back, in the end Output is equal to the input, regeneration of the signal happens because output is taken straight from the power rails(VDD/VSS) rather then the input
+> 2 inverters back to back, in the end Output is equal to the input, regeneration of the signal happens because output is taken straight from the power rails(VDD/VSS) rather then the input
 
 ## OR2
 
@@ -275,5 +275,50 @@ NAND3(A,B,C) = \overline{A \land B \land C} = \overline{A \sdot B \sdot C}
 | :--: | - | - |
 |  00  | 1 | 1 |
 |  01  | 1 | 1 |
-|  10  | 1 | 1 |
 |  11  | 1 | 0 |
+|  10  | 1 | 1 |
+
+## XOR3
+
+```math
+XOR3(A,B,C) = \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC
+```
+
+### Truth Table
+
+| A | B | C | Q |
+| - | - | - | - |
+| 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 1 |
+| 0 | 1 | 1 | 0 |
+| 1 | 0 | 0 | 1 |
+| 1 | 0 | 1 | 0 |
+| 1 | 1 | 0 | 0 |
+| 1 | 1 | 1 | 1 |
+
+### Karneugh Net
+
+| AB\C | 0 | 1 |
+| :--: | - | - |
+|  00  | 0 | 1 |
+|  01  | 1 | 0 |
+|  11  | 0 | 1 |
+|  10  | 1 | 0 |
+
+### Transistor Implementation
+
+```math
+XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC \\
+\text{To make it into a PDN and PUN representation, we need to find the invert of this function to easily implemnent PDN}\\
+\text{First: Take your XOR function and double invert it so } Y=\overline{\overline{Y}} \\
+\overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC = \overline{\overline{\overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC}} \\
+\text{Second: Take the }\overline{Y}\text{ and apply DeMorgan's Laws to eventually not have groups of inputs inverted together, ex. }\overline{(AB)}\text{ has to be avoided} \\
+\overline{\overline{\overline{A}\overline{B}C} \sdot \overline{A\overline{B}\overline{C}} \sdot \overline{\overline{A}B\overline{C}} \sdot \overline{ABC}} = \overline{\overline{\overline{A+B}C} \sdot \overline{\overline{A+C}B} \sdot \overline{\overline{B+C}A} \sdot \overline{\overline{\overline{A}+\overline{B}}C}} = \\ \overline{(A+B+\overline{C}) \sdot (A+\overline{B}+C) \sdot (\overline{A}+B+C) \sdot (\overline{A}+\overline{B} + \overline{C})} \\
+\text{Lastly: Having a }\overline{Y}\text{ XOR3 representation we can implement PDN and get PUN}
+
+```
+
+
+
+![XOR3](circuits_visual/xor3.svg "XOR3")
