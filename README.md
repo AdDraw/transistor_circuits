@@ -17,7 +17,7 @@ Q = \overline{A}
 
 ### Transistor Implementation
 
-![img](circuits_visual/inv.svg)
+![img](circuits_visual/inv.drawio.svg)
 
 > there exist alternative implementations of the NOT gate / Inverter gate but this is the smallest in size(and probably also the fastest), other implementations use NAND or NOR gates that have both gate inputs tied to the same driver, this is because both NAND, NOR or XNOR gates are naturally inverting.
 
@@ -36,7 +36,7 @@ Q = \overline{A}
 
 ### Transistor Implementation
 
-![i](circuits_visual/buf.svg)
+![i](circuits_visual/buf.drawio.svg)
 
 > 2 inverters back to back, in the end Output is equal to the input, regeneration of the signal happens because output is taken straight from the power rails(VDD/VSS) rather then the input
 
@@ -133,7 +133,7 @@ XOR(A,B) = (\overline{A} \sdot B) + (\overline{B} \sdot A) = \overline{\overline
 
 ```
 
-![xor.svg](circuits_visual/xor.svg)
+![xor.drawio.svg](circuits_visual/xor.drawio.svg)
 
 > Size: 16 transistors = 4 x NAND2 = 4 x 4 = 16
 
@@ -147,7 +147,7 @@ A \sdot \overline{B} = A \sdot \overline{B} + B \sdot \overline{B} = \overline{B
 \overline{a} = \overline{a + a} \text{ ; } a = a + a
 ```
 
-![xor_nor.svg](circuits_visual/xor_nor2.svg)
+![xor_nor.drawio.svg](circuits_visual/xor_nor2.drawio.svg)
 
 > Size: 20 transistors = 5 x NOR2 = 5 x 4 = 20
 
@@ -157,7 +157,7 @@ A \sdot \overline{B} = A \sdot \overline{B} + B \sdot \overline{B} = \overline{B
 XOR(A,B) = (A \lor B ) \land (\overline{A} \lor \overline{B}) = \overline{\overline{A \lor B} \lor \overline{\overline{A} \lor \overline{B}}} = \overline{\overline{\overline{A} \land \overline{B}} \lor \overline{\overline{A \land B}}}
 ```
 
-![xor2_mixed.svg](circuits_visual/xor2_mixed.svg)
+![xor2_mixed.drawio.svg](circuits_visual/xor2_mixed.drawio.svg)
 
 > size: 20 transistors = 2 x NAND2 + 4 x NOT + 1 x NOR2 = 2 x 4 + 4 x 2 + 1 x 4 = 20
 
@@ -168,7 +168,7 @@ To generate a XOR we will get:
 ```math
 \text{Simple implementation (a)}:
 \text{} \\
-\text{XOR but CMOS logic is inverting this means that logic in the PDN has} \\ 
+\text{XOR but CMOS logic is inverting this means that logic in the PDN has} \\
 \text{to be the inversion of the inversion of the XOR to get a XOR and not XNOR at the output} \\
 \text{that means that we have to implement a XNOR logic to the PDN to get a XOR at the output }
 \\
@@ -178,7 +178,7 @@ PDN = \overline{(A * B) + (\overline{A} * \overline{B})}\\
 PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\overline{A} * \overline{B})} } } = \overline{(A * B)} * \overline{(\overline{A} * \overline{B})} = (\overline{A} + \overline{B}) * \overline{\overline{A + B}} = (\overline{A} + \overline{B}) * (A + B)
 \\ \text{}
 \\ \text{Transistor optimal implementation b)}
-\\ \text{In this case since XOR logic is double rail logic, inputs and inverted inputs have to be provided} 
+\\ \text{In this case since XOR logic is double rail logic, inputs and inverted inputs have to be provided}
 \\ \text{that means that PUN logic can be written kinda hackypacky}
 \\ \text{PUN} = (A \sdot \overline{B}) + (\overline{A} \sdot B)
 \\ \text{PDN} = \overline{XOR} = XNOR = (A \sdot B) + (\overline{A} \sdot \overline {B})
@@ -186,7 +186,7 @@ PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\ove
 \\ \text{Option B is better because ??? less Drain capacitance ?? Easier to route?}
 ```
 
-![xor_tran.svg](circuits_visuals/../circuits_visual/xor_tran.svg)
+![xor_tran.drawio.svg](circuits_visuals/../circuits_visual/xor_tran.drawio.svg)
 
 > size: 12 transistors = 1x8 + 2xNOT = 1x8 + 2x2 = 12
 
@@ -246,7 +246,7 @@ NAND2(A,B) = \overline{A \land B} = \overline{A \sdot B}
 
 ### Gate Implementation
 
-![nand2.svg](circuits_visual/nand2.svg)
+![nand2.drawio.svg](circuits_visual/nand2.drawio.svg)
 
 ### Transistor Implementation
 
@@ -319,6 +319,4 @@ XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A
 
 ```
 
-
-
-![XOR3](circuits_visual/xor3.svg "XOR3")
+![XOR3](circuits_visual/xor3.drawio.svg "XOR3")
