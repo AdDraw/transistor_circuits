@@ -151,11 +151,13 @@ XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) = \overline{\overline
 
 ```math
 \displaylines{
-XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}\\
-\text{legend: } \\
-\overline{A} \cdot B = \overline{A} \cdot B + A \cdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}} \\
-A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}} \\
-\overline{a} = \overline{a + a} \text{ ; } a = a + a
+XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = 
+\\ \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} =
+\\ \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}
+\\ \text{legend: }
+\\ \overline{A} \cdot B = \overline{A} \cdot B + A \cdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}}
+\\ A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}}
+\\ \overline{a} = \overline{a + a} \text{ ; } a = a + a
 }
 ```
 
