@@ -10,8 +10,9 @@ Q = \overline{A}
 
 ### Truth Table
 
+
 | A | Q |
-| - | - |
+| --- | --- |
 | 0 | 1 |
 | 1 | 0 |
 
@@ -29,8 +30,9 @@ Q = \overline{A}
 
 ### Truth Table
 
+
 | A | Q |
-| - | - |
+| --- | --- |
 | 0 | 0 |
 | 1 | 1 |
 
@@ -48,8 +50,9 @@ Q = A \lor B = A + B
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 0 |
 | 0 | 1 | 1 |
 | 1 | 0 | 1 |
@@ -57,8 +60,9 @@ Q = A \lor B = A + B
 
 ### Karneugh net
 
+
 | A\B | 0 | 1 |
-| :-: | - | - |
+| :---: | --- | --- |
 |  0  | 0 | 1 |
 |  1  | 1 | 1 |
 
@@ -70,8 +74,9 @@ Q = \overline{A \lor B} = \overline{A + B}
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 1 |
 | 0 | 1 | 0 |
 | 1 | 0 | 0 |
@@ -79,8 +84,9 @@ Q = \overline{A \lor B} = \overline{A + B}
 
 ### Karneugh net
 
+
 | A\B | 0 | 1 |
-| :-: | - | - |
+| :---: | --- | --- |
 |  0  | 1 | 0 |
 |  1  | 0 | 0 |
 
@@ -94,8 +100,9 @@ Q = \overline{A \lor B} = \overline{A + B}
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 0 |
 | 0 | 1 | 1 |
 | 1 | 0 | 1 |
@@ -103,33 +110,34 @@ Q = \overline{A \lor B} = \overline{A + B}
 
 ### Karneugh net
 
+
 | A\B | 0 | 1 |
-| :-: | - | - |
+| :---: | --- | --- |
 |  0  | 0 | 1 |
 |  1  | 1 | 0 |
 
-- sum of products = $B \sdot \overline{A} + A \sdot \overline{B}$
-- product of sums = $A+B \sdot \overline{A} + \overline{B}$
+- sum of products = $B \cdot \overline{A} + A \cdot \overline{B}$
+- product of sums = $A+B \cdot \overline{A} + \overline{B}$
 
 ### Transistor Implementation
 
 #### NAND2 only implementation(no inverters)
 
 ```math
-\overline{\overline{A \sdot (\overline{A \sdot B})} \sdot \overline{B \sdot (\overline{A \sdot B})}}
+\overline{\overline{A \cdot (\overline{A \cdot B})} \cdot \overline{B \cdot (\overline{A \cdot B})}}
 ```
 
 Achieved through:
 
 ```math
-XOR(A,B) = (\overline{A} \sdot B) + (\overline{B} \sdot A) = \overline{\overline{(\overline{A} \sdot B)} \sdot \overline{(\overline{B} \sdot A)}}
-= \overline{\overline{(\overline{A \sdot B} \sdot B)} \sdot \overline{(\overline{B \sdot A} \sdot A)}} \\
+XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) = \overline{\overline{(\overline{A} \cdot B)} \cdot \overline{(\overline{B} \cdot A)}}
+= \overline{\overline{(\overline{A \cdot B} \cdot B)} \cdot \overline{(\overline{B \cdot A} \cdot A)}} \\
 
 \text{legend: } \\
 
-\overline{A} \sdot B = B \sdot \overline{A} + B \sdot \overline{B} = B \sdot (\overline{B} + \overline{A}) = B \sdot (\overline{B} + \overline{A}) = B \sdot \overline{B \sdot A} \text{ ; } B \sdot \overline{B} = 0 \\
+\overline{A} \cdot B = B \cdot \overline{A} + B \cdot \overline{B} = B \cdot (\overline{B} + \overline{A}) = B \cdot (\overline{B} + \overline{A}) = B \cdot \overline{B \cdot A} \text{ ; } B \cdot \overline{B} = 0 \\
 
-\overline{B} \sdot A = A \sdot \overline{B} + A \sdot \overline{A} = A \sdot (\overline{B} + \overline{A}) = A \sdot (\overline{B} + \overline{A}) = A \sdot \overline{B \sdot A} \text{ ; } A \sdot \overline{A} = 0
+\overline{B} \cdot A = A \cdot \overline{B} + A \cdot \overline{A} = A \cdot (\overline{B} + \overline{A}) = A \cdot (\overline{B} + \overline{A}) = A \cdot \overline{B \cdot A} \text{ ; } A \cdot \overline{A} = 0
 
 ```
 
@@ -140,10 +148,10 @@ XOR(A,B) = (\overline{A} \sdot B) + (\overline{B} \sdot A) = \overline{\overline
 #### NOR2 only implementation
 
 ```math
-XOR(A,B) = (\overline{A} \sdot B) + (\overline{B} \sdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}\\
+XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}\\
 \text{legend: } \\
-\overline{A} \sdot B = \overline{A} \sdot B + A \sdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}} \\
-A \sdot \overline{B} = A \sdot \overline{B} + B \sdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}} \\
+\overline{A} \cdot B = \overline{A} \cdot B + A \cdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}} \\
+A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}} \\
 \overline{a} = \overline{a + a} \text{ ; } a = a + a
 ```
 
@@ -180,8 +188,8 @@ PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\ove
 \\ \text{Transistor optimal implementation b)}
 \\ \text{In this case since XOR logic is double rail logic, inputs and inverted inputs have to be provided}
 \\ \text{that means that PUN logic can be written kinda hackypacky}
-\\ \text{PUN} = (A \sdot \overline{B}) + (\overline{A} \sdot B)
-\\ \text{PDN} = \overline{XOR} = XNOR = (A \sdot B) + (\overline{A} \sdot \overline {B})
+\\ \text{PUN} = (A \cdot \overline{B}) + (\overline{A} \cdot B)
+\\ \text{PDN} = \overline{XOR} = XNOR = (A \cdot B) + (\overline{A} \cdot \overline {B})
 \\ \text{Only real requirement is that PUN and PDN logic is not active at the same time, since PUN drives 1 and PDN drives 0 we can take XOR PUN or PDN not as DEMorgan's computed equivalents but as 2 separate equations}
 \\ \text{Option B is better because ??? less Drain capacitance ?? Easier to route?}
 ```
@@ -190,7 +198,7 @@ PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\ove
 
 > size: 12 transistors = 1x8 + 2xNOT = 1x8 + 2x2 = 12
 
-Schematic a) is created as if $\text{PDN} = \overline{\overline{XOR}} = \overline{XNOR(A,B)} = (A \sdot B) + (\overline{A} \sdot \overline {B})$ and PUN if we were to create a complementary PUN it would be equal to $\text{PUN} = XOR = (A + B) \sdot (\overline{A} + \overline {B})$. On the other hand b) represents XOR but PUN is taken from usual XOR equation as a sum of products. Logic checks out in b) because all 4 states of input values are covered and are not overlapping.
+Schematic a) is created as if $\text{PDN} = \overline{\overline{XOR}} = \overline{XNOR(A,B)} = (A \cdot B) + (\overline{A} \cdot \overline {B})$ and PUN if we were to create a complementary PUN it would be equal to $\text{PUN} = XOR = (A + B) \cdot (\overline{A} + \overline {B})$. On the other hand b) represents XOR but PUN is taken from usual XOR equation as a sum of products. Logic checks out in b) because all 4 states of input values are covered and are not overlapping.
 
 > Going from a) to b) could be imagined as untwisting a)'s PUN.
 
@@ -200,8 +208,9 @@ Schematic a) is created as if $\text{PDN} = \overline{\overline{XOR}} = \overlin
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 1 |
 | 0 | 1 | 0 |
 | 1 | 0 | 0 |
@@ -209,21 +218,23 @@ Schematic a) is created as if $\text{PDN} = \overline{\overline{XOR}} = \overlin
 
 ### Karneugh net
 
+
 | A\B | 0 | 1 |
-| :-: | - | - |
+| :---: | --- | --- |
 |  0  | 1 | 0 |
 |  1  | 0 | 1 |
 
 ## AND2
 
 ```math
-AND(A,B) = A \land B = A \sdot B
+AND(A,B) = A \land B = A \cdot B
 ```
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 0 |
 | 0 | 1 | 0 |
 | 1 | 0 | 0 |
@@ -232,13 +243,14 @@ AND(A,B) = A \land B = A \sdot B
 ## NAND2
 
 ```math
-NAND2(A,B) = \overline{A \land B} = \overline{A \sdot B}
+NAND2(A,B) = \overline{A \land B} = \overline{A \cdot B}
 ```
 
 ### Truth Table
 
+
 | A | B | Q |
-| - | - | - |
+| --- | --- | --- |
 | 0 | 0 | 1 |
 | 0 | 1 | 1 |
 | 1 | 0 | 1 |
@@ -253,13 +265,14 @@ NAND2(A,B) = \overline{A \land B} = \overline{A \sdot B}
 ## NAND3
 
 ```math
-NAND3(A,B,C) = \overline{A \land B \land C} = \overline{A \sdot B \sdot C}
+NAND3(A,B,C) = \overline{A \land B \land C} = \overline{A \cdot B \cdot C}
 ```
 
 ### Truth Table
 
+
 | A | B | C | Q |
-| - | - | - | - |
+| --- | --- | --- | --- |
 | 0 | 0 | 0 | 1 |
 | 0 | 0 | 1 | 1 |
 | 0 | 1 | 0 | 1 |
@@ -271,8 +284,9 @@ NAND3(A,B,C) = \overline{A \land B \land C} = \overline{A \sdot B \sdot C}
 
 ### Karneugh Net
 
+
 | AB\C | 0 | 1 |
-| :--: | - | - |
+| :----: | --- | --- |
 |  00  | 1 | 1 |
 |  01  | 1 | 1 |
 |  11  | 1 | 0 |
@@ -286,8 +300,9 @@ XOR3(A,B,C) = \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{
 
 ### Truth Table
 
+
 | A | B | C | Q |
-| - | - | - | - |
+| --- | --- | --- | --- |
 | 0 | 0 | 0 | 0 |
 | 0 | 0 | 1 | 1 |
 | 0 | 1 | 0 | 1 |
@@ -299,8 +314,9 @@ XOR3(A,B,C) = \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{
 
 ### Karneugh Net
 
+
 | AB\C | 0 | 1 |
-| :--: | - | - |
+| :----: | --- | --- |
 |  00  | 0 | 1 |
 |  01  | 1 | 0 |
 |  11  | 0 | 1 |
@@ -314,7 +330,7 @@ XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A
 \text{First: Take your XOR function and double invert it so } Y=\overline{\overline{Y}} \\
 \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC = \overline{\overline{\overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC}} \\
 \text{Second: Take the }\overline{Y}\text{ and apply DeMorgan's Laws to eventually not have groups of inputs inverted together, ex. }\overline{(AB)}\text{ has to be avoided} \\
-\overline{\overline{\overline{A}\overline{B}C} \sdot \overline{A\overline{B}\overline{C}} \sdot \overline{\overline{A}B\overline{C}} \sdot \overline{ABC}} = \overline{\overline{\overline{A+B}C} \sdot \overline{\overline{A+C}B} \sdot \overline{\overline{B+C}A} \sdot \overline{\overline{\overline{A}+\overline{B}}C}} = \\ \overline{(A+B+\overline{C}) \sdot (A+\overline{B}+C) \sdot (\overline{A}+B+C) \sdot (\overline{A}+\overline{B} + \overline{C})} \\
+\overline{\overline{\overline{A}\overline{B}C} \cdot \overline{A\overline{B}\overline{C}} \cdot \overline{\overline{A}B\overline{C}} \cdot \overline{ABC}} = \overline{\overline{\overline{A+B}C} \cdot \overline{\overline{A+C}B} \cdot \overline{\overline{B+C}A} \cdot \overline{\overline{\overline{A}+\overline{B}}C}} = \\ \overline{(A+B+\overline{C}) \cdot (A+\overline{B}+C) \cdot (\overline{A}+B+C) \cdot (\overline{A}+\overline{B} + \overline{C})} \\
 \text{Lastly: Having a }\overline{Y}\text{ XOR3 representation we can implement PDN and get PUN}
 
 ```
