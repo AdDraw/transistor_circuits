@@ -208,7 +208,7 @@
   X_master d r en nen mq mq_bar d_latch_alt3 N={N}
   * Slave (active low)
   X_slave mq_bar r nen en sq q d_latch_alt4 N={N}
-.ends fffls
+.ends fffhr
 
 
 .subckt MUX21 a b s q
