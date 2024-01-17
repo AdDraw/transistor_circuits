@@ -130,6 +130,7 @@ Q = \overline{A \lor B} = \overline{A + B}
 Achieved through:
 
 ```math
+\displaylines{
 XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) = \overline{\overline{(\overline{A} \cdot B)} \cdot \overline{(\overline{B} \cdot A)}}
 = \overline{\overline{(\overline{A \cdot B} \cdot B)} \cdot \overline{(\overline{B \cdot A} \cdot A)}} \\
 
@@ -138,6 +139,7 @@ XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) = \overline{\overline
 \overline{A} \cdot B = B \cdot \overline{A} + B \cdot \overline{B} = B \cdot (\overline{B} + \overline{A}) = B \cdot (\overline{B} + \overline{A}) = B \cdot \overline{B \cdot A} \text{ ; } B \cdot \overline{B} = 0 \\
 
 \overline{B} \cdot A = A \cdot \overline{B} + A \cdot \overline{A} = A \cdot (\overline{B} + \overline{A}) = A \cdot (\overline{B} + \overline{A}) = A \cdot \overline{B \cdot A} \text{ ; } A \cdot \overline{A} = 0
+}
 
 ```
 
@@ -148,11 +150,15 @@ XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) = \overline{\overline
 #### NOR2 only implementation
 
 ```math
-XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}\\
-\text{legend: } \\
-\overline{A} \cdot B = \overline{A} \cdot B + A \cdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}} \\
-A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}} \\
-\overline{a} = \overline{a + a} \text{ ; } a = a + a
+\displaylines{
+XOR(A,B) = (\overline{A} \cdot B) + (\overline{B} \cdot A) =  \overline{A + \overline{A + B}} + \overline{B + \overline{A + B}} = 
+\\ \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} = \overline{\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}} =
+\\ \overline{(\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}}) + (\overline{\overline{A + \overline{A + B}} + \overline{B + \overline{A + B}}})}
+\\ \text{legend: }
+\\ \overline{A} \cdot B = \overline{A} \cdot B + A \cdot \overline{A} = \overline{A}(A + B) = \overline{A + \overline{A + B}}
+\\ A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B}(A + B) = \overline{B + \overline{A + B}}
+\\ \overline{a} = \overline{a + a} \text{ ; } a = a + a
+}
 ```
 
 ![xor_nor.drawio.svg](circuits_visual/xor_nor2.drawio.svg)
@@ -162,7 +168,9 @@ A \cdot \overline{B} = A \cdot \overline{B} + B \cdot \overline{B} = \overline{B
 #### NOR + NAND implementation
 
 ```math
+\displaylines{
 XOR(A,B) = (A \lor B ) \land (\overline{A} \lor \overline{B}) = \overline{\overline{A \lor B} \lor \overline{\overline{A} \lor \overline{B}}} = \overline{\overline{\overline{A} \land \overline{B}} \lor \overline{\overline{A \land B}}}
+}
 ```
 
 ![xor2_mixed.drawio.svg](circuits_visual/xor2_mixed.drawio.svg)
@@ -174,6 +182,7 @@ XOR(A,B) = (A \lor B ) \land (\overline{A} \lor \overline{B}) = \overline{\overl
 To generate a XOR we will get:
 
 ```math
+\displaylines{
 \text{Simple implementation (a)}:
 \text{} \\
 \text{XOR but CMOS logic is inverting this means that logic in the PDN has} \\
@@ -190,8 +199,10 @@ PUN = DeMorgan(PDN) = \overline{ \overline{ \overline{(A * B)} * \overline{(\ove
 \\ \text{that means that PUN logic can be written kinda hackypacky}
 \\ \text{PUN} = (A \cdot \overline{B}) + (\overline{A} \cdot B)
 \\ \text{PDN} = \overline{XOR} = XNOR = (A \cdot B) + (\overline{A} \cdot \overline {B})
-\\ \text{Only real requirement is that PUN and PDN logic is not active at the same time, since PUN drives 1 and PDN drives 0 we can take XOR PUN or PDN not as DEMorgan's computed equivalents but as 2 separate equations}
+\\ \text{Only real requirement is that PUN and PDN logic is not active at the same time}
+\\ \text{since PUN drives 1 and PDN drives 0 we can take XOR PUN or PDN not as DEMorgan's computed equivalents but as 2 separate equations}
 \\ \text{Option B is better because ??? less Drain capacitance ?? Easier to route?}
+}
 ```
 
 ![xor_tran.drawio.svg](circuits_visuals/../circuits_visual/xor_tran.drawio.svg)
@@ -325,14 +336,15 @@ XOR3(A,B,C) = \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{
 ### Transistor Implementation
 
 ```math
-XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC \\
-\text{To make it into a PDN and PUN representation, we need to find the invert of this function to easily implemnent PDN}\\
+\displaylines{
+XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC \newline
+\text{To make it into a PDN and PUN representation, we need to find the invert of this function to easily implemnent PDN} \\
 \text{First: Take your XOR function and double invert it so } Y=\overline{\overline{Y}} \\
 \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC = \overline{\overline{\overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC}} \\
 \text{Second: Take the }\overline{Y}\text{ and apply DeMorgan's Laws to eventually not have groups of inputs inverted together, ex. }\overline{(AB)}\text{ has to be avoided} \\
 \overline{\overline{\overline{A}\overline{B}C} \cdot \overline{A\overline{B}\overline{C}} \cdot \overline{\overline{A}B\overline{C}} \cdot \overline{ABC}} = \overline{\overline{\overline{A+B}C} \cdot \overline{\overline{A+C}B} \cdot \overline{\overline{B+C}A} \cdot \overline{\overline{\overline{A}+\overline{B}}C}} = \\ \overline{(A+B+\overline{C}) \cdot (A+\overline{B}+C) \cdot (\overline{A}+B+C) \cdot (\overline{A}+\overline{B} + \overline{C})} \\
 \text{Lastly: Having a }\overline{Y}\text{ XOR3 representation we can implement PDN and get PUN}
-
+}
 ```
 
 ![XOR3](circuits_visual/xor3.drawio.svg "XOR3")
