@@ -325,8 +325,8 @@ XOR3(A,B,C) = \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{
 ### Transistor Implementation
 
 ```math
-XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC \\
-\text{To make it into a PDN and PUN representation, we need to find the invert of this function to easily implemnent PDN}\\
+XOR3(A,B,C)= \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC \newline
+\text{To make it into a PDN and PUN representation, we need to find the invert of this function to easily implemnent PDN} \\
 \text{First: Take your XOR function and double invert it so } Y=\overline{\overline{Y}} \\
 \overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC = \overline{\overline{\overline{A}\overline{B}C + A\overline{B}\overline{C} + \overline{A}B\overline{C} + ABC}} \\
 \text{Second: Take the }\overline{Y}\text{ and apply DeMorgan's Laws to eventually not have groups of inputs inverted together, ex. }\overline{(AB)}\text{ has to be avoided} \\
