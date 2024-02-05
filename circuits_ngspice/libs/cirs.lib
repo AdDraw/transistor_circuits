@@ -177,7 +177,7 @@
   X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
 .ends d_latch_alt4
 
-.subckt d_latch_with_async_reset_active_low d r en nen q q_bar mval=N Lval=mos_Length
+.subckt d_latch_with_async_reset_active_low d r en nen q_bar q mval=N Lval=mos_Length
   X0 d r norq nand2       mval={mval} Lval={Lval}
   X1 norq q en nen tg     mval={mval} Lval={Lval}
   X2 q q_bar inv          mval={mval} Lval={Lval}
@@ -185,7 +185,7 @@
   X4 norq2 q nen en tg    mval={mval} Lval={Lval}
 .ends d_latch_with_async_reset_active_low
 
-.subckt d_latch_with_async_set_active_high d s en nen q q_bar mval=N Lval=mos_Length
+.subckt d_latch_with_async_set_active_high d s en nen q_bar q mval=N Lval=mos_Length
   X0 d s norq nor2        mval={mval} Lval={Lval}
   X1 norq q en nen tg     mval={mval} Lval={Lval}
   X2 q q_bar inv          mval={mval} Lval={Lval}

@@ -1,0 +1,66 @@
+* Latches
+.param supply=1.8
+.param t_r=10p
+.param t_f=20p
+.param mval=1
+.param out_load=10f
+.temp 27
+.global vdd gnd
+.lib "libs/cirs.lib" circuits_LVL_14
+Vdd vdd 0 'supply'
+
+* Voltage sources/ Signal sources
+V1 en  0 PULSE 0        'supply' 0.1n 't_r' 't_f' 1n 5n
+V2 nen 0 PULSE 'supply' 0        0.1n 't_r' 't_f' 1n 5n
+V3 a   0 PULSE 0        'supply' 0.3n 't_r' 't_f' 1n 2n
+V4 s   0 PULSE 0        'supply' 0    't_r' 't_f' 9n 19n
+
+
+* d latch
+X0 a   en nen q1 q1_bar d_latch mval='mval'
+* d latch with async reset active low
+X1 a s en nen q2 q2_bar d_latch_with_async_reset_active_low mval='mval'
+* d latch with async set active high
+X2 a s en nen q3 q3_bar d_latch_with_async_set_active_high mval='mval'
+
+* d latch with async ctrl set active high
+X3 a q4 q4_bar en nen s vdd d_latch_async_ctrl_active_high mval='mval'
+* d latch with async ctrl reset active high
+X4 a q5 q5_bar en nen s gnd d_latch_async_ctrl_active_high mval='mval'
+* d latch with async ctrl set active low
+X5 a q6 q6_bar en nen s vdd d_latch_async_ctrl_active_low  mval='mval'
+* d latch with async ctrl reset active low
+X7 a q7 q7_bar en nen s gnd d_latch_async_ctrl_active_low  mval='mval'
+
+* output capacitances
+C1  q1     0 'out_load'
+C2  q1_bar 0 'out_load'
+C3  q2     0 'out_load'
+C4  q2_bar 0 'out_load'
+C5  q3     0 'out_load'
+C6  q3_bar 0 'out_load'
+C7  q4     0 'out_load'
+C8  q4_bar 0 'out_load'
+C9  q5     0 'out_load'
+C10 q5_bar 0 'out_load'
+C11 q6     0 'out_load'
+C12 q6_bar 0 'out_load'
+C13 q7     0 'out_load'
+C14 q7_bar 0 'out_load'
+
+.tran 10p 20n
+
+.control
+run
+set color0 = white
+set color1 = black
+set xbrushwidth=3
+plot a     en-2 nen-4 q1-6 q1_bar-8
+plot a s-2 en-4 nen-6 q2-8 q2_bar-10
+plot a s-2 en-4 nen-6 q3-8 q3_bar-10
+plot a s-2 en-4 nen-6 q4-8 q4_bar-10
+plot a s-2 en-4 nen-6 q5-8 q5_bar-10
+plot a s-2 en-4 nen-6 q6-8 q6_bar-10
+plot a s-2 en-4 nen-6 q7-8 q7_bar-10
+.endc
+.end
