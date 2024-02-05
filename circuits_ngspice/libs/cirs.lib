@@ -134,24 +134,20 @@
   X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 mval={mval} Lval={Lval}
 .ends
 
-
 .subckt tg in out en nen mval=N Lval=mos_Length
   M1 in nen out vdd pmos L={Lval} W={2 * Lval} m={mval}
   M2 in en  out gnd nmos L={Lval} W={2 * Lval} m={mval}
 .ends tg
 
-
 *******************************************************************************
 ** LATCHES                                                                   **
 *******************************************************************************
-
 .subckt d_latch d en nen q q_bar mval=N Lval=mos_Length
   X0 d     q     en  nen tg  mval={mval} Lval={Lval}
   X1 q     q_bar         inv mval={mval} Lval={Lval}
   X2 q_bar q2            inv mval={mval} Lval={Lval}
   X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
 .ends d_latch
-
 
 .subckt d_latch_alt1 d s en nen q q_bar mval=N Lval=mos_Length
   X0 d     q     en  nen tg  mval={mval} Lval={Lval}
@@ -261,6 +257,5 @@
   * Slave (active low)
   X_slave mq_bar r nen en sq q d_latch_alt4 mval={mval} Lval={Lval}
 .ends dfffhr
-
 
 .endl
