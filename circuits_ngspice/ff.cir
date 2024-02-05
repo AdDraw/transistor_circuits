@@ -4,6 +4,8 @@
 .param supply=1.8
 .param t_r=10p
 .param t_f=20p
+.param mval=1
+.param out_load=10f
 .temp 27
 .global vdd gnd
 .lib "libs/cirs.lib" circuits_LVL_14
@@ -16,24 +18,25 @@ V3 d       0 PULSE 0        'supply' 0.3n 't_r' 't_f' 3n 6n
 V4 sr      0 PULSE 0        'supply' 0n   't_r' 't_f' 15n 30n
 
 * master-slave dff active rising edge
-X1 d clk clk_bar q_r dff_r mval=4
+X1 d    clk clk_bar q_r   dffr   mval='mval'
 * master-slave ddff active rising edge, active low set
-X2 d sr clk clk_bar q_rls dffrls mval=4
+X2 d sr clk clk_bar q_rls dffrls mval='mval'
 * master-slave dff active rising edge, active high reset
-X3 d sr clk clk_bar q_rhr dffrhr mval=4
+X3 d sr clk clk_bar q_rhr dffrhr mval='mval'
 * master-slave dff active falling edge
-X4 d clk clk_bar q_f dff_f mval=4
+X4 d    clk clk_bar q_f   dfff   mval='mval'
 * master-slave dff active falling edge, active low set
-X5 d sr clk clk_bar q_fls dfffls mval=4
+X5 d sr clk clk_bar q_fls dfffls mval='mval'
 * master-slave dff active falling edge, active high reset
-X6 d sr clk clk_bar q_fhr dfffhr mval=4
+X6 d sr clk clk_bar q_fhr dfffhr mval='mval'
 
-C1 q_r   0 10f
-C2 q_rls 0 10f
-C3 q_rhr 0 10f
-C4 q_f   0 10f
-C5 q_fls 0 10f
-C6 q_fhr 0 10f
+* Output capacitances
+C1 q_r   0 'out_load'
+C2 q_rls 0 'out_load'
+C3 q_rhr 0 'out_load'
+C4 q_f   0 'out_load'
+C5 q_fls 0 'out_load'
+C6 q_fhr 0 'out_load'
 
 .tran 10p 25n
 
@@ -42,10 +45,10 @@ run
 set color0 = white
 set color1 = black
 set xbrushwidth=3
-plot clk d-2 q_r-4
+plot clk      d-2 q_r   - 4
 plot clk sr-2 d-4 q_rls - 6
 plot clk sr-2 d-4 q_rhr - 6
-plot clk d-2 q_f-4
+plot clk      d-2 q_f   - 4
 plot clk sr-2 d-4 q_fls - 6
 plot clk sr-2 d-4 q_fhr - 6
 .endc
