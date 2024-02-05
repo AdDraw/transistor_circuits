@@ -5,6 +5,9 @@
 .model nmos nmos level=14 version=4.8.2
 .model pmos pmos level=14 version=4.8.2
 
+*******************************************************************************
+** LOGIC GATES                                                               **
+*******************************************************************************
 .subckt inv in out mval=N Lval=mos_Length
   M1 out in vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
   M2 out in gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
@@ -96,10 +99,51 @@
   M8 tmp4 B_bar gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
 .ends xor2_tran_opt
 
+.subckt MUX21 a b s q mval=N Lval=mos_Length
+  Xinv s s_bar inv mval={mval} Lval={Lval}
+  X0   a q s_bar s tg mval={mval} Lval={Lval}
+  X1   b q s s_bar tg mval={mval} Lval={Lval}
+.ends
+
+.subckt XOR3 a b c q
+  .subckt serialp3 a b c top bot body
+    Mpt top  a  tmp1 body pmos L={Lval} W={2 * Lval} m={mval}
+    Mpm tmp1 b  tmp2 body pmos L={Lval} W={2 * Lval} m={mval}
+    Mpb tmp2 c  bot  body pmos L={Lval} W={2 * Lval} m={mval}
+  .ends
+
+  .subckt paralleln3 a b c top bot body
+    Mpt top a bot body nmos L={Lval} W={2 * Lval} m={mval}
+    Mpm top b bot body nmos L={Lval} W={2 * Lval} m={mval}
+    Mpb top c bot body nmos L={Lval} W={2 * Lval} m={mval}
+  .ends
+
+  * INPUT INVERTERS
+  Xinv0 a a_bar inv mval={mval} Lval={Lval}
+  Xinv1 b b_bar inv mval={mval} Lval={Lval}
+  Xinv2 c c_bar inv mval={mval} Lval={Lval}
+  * PUN
+  X0 a     b     c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X1 a     b_bar c     vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X2 a_bar b     c     vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X3 a_bar b_bar c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
+  * PDN
+  X4 a     b     c_bar q    tmp1 gnd paralleln3 mval={mval} Lval={Lval}
+  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3 mval={mval} Lval={Lval}
+  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3 mval={mval} Lval={Lval}
+  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 mval={mval} Lval={Lval}
+.ends
+
+
 .subckt tg in out en nen mval=N Lval=mos_Length
   M1 in nen out vdd pmos L={Lval} W={2 * Lval} m={mval}
   M2 in en  out gnd nmos L={Lval} W={2 * Lval} m={mval}
 .ends tg
+
+
+*******************************************************************************
+** LATCHES                                                                   **
+*******************************************************************************
 
 .subckt d_latch d en nen q q_bar mval=N Lval=mos_Length
   X0 d     q     en  nen tg  mval={mval} Lval={Lval}
@@ -173,6 +217,9 @@
   Xtg1  mux1out q nen en tg mval={mval} Lval={Lval}
 .ends
 
+*******************************************************************************
+** FLIP FLOPS                                                                **
+*******************************************************************************
 .subckt dffr d en nen q mval=N Lval=mos_Length
   * Master (active low)
   X_master d nen en mq mq_bar d_latch mval={mval} Lval={Lval}
@@ -215,42 +262,5 @@
   X_slave mq_bar r nen en sq q d_latch_alt4 mval={mval} Lval={Lval}
 .ends dfffhr
 
-
-.subckt MUX21 a b s q mval=N Lval=mos_Length
-  Xinv s s_bar inv mval={mval} Lval={Lval}
-  X0   a q s_bar s tg mval={mval} Lval={Lval}
-  X1   b q s s_bar tg mval={mval} Lval={Lval}
-.ends
-
-
-** XOR3 lib
-.subckt serialp3 a b c top bot body
-  Mpt top  a  tmp1 body pmos L={Lval} W={2 * Lval} m={mval}
-  Mpm tmp1 b  tmp2 body pmos L={Lval} W={2 * Lval} m={mval}
-  Mpb tmp2 c  bot  body pmos L={Lval} W={2 * Lval} m={mval}
-.ends
-
-.subckt paralleln3 a b c top bot body
-  Mpt top a bot body nmos L={Lval} W={2 * Lval} m={mval}
-  Mpm top b bot body nmos L={Lval} W={2 * Lval} m={mval}
-  Mpb top c bot body nmos L={Lval} W={2 * Lval} m={mval}
-.ends
-
-.subckt XOR3 a b c q
-  * INPUT INVERTERS
-  Xinv0 a a_bar inv mval={mval} Lval={Lval}
-  Xinv1 b b_bar inv mval={mval} Lval={Lval}
-  Xinv2 c c_bar inv mval={mval} Lval={Lval}
-  * PUN
-  X0 a     b     c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X1 a     b_bar c     vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X2 a_bar b     c     vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X3 a_bar b_bar c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
-  * PDN
-  X4 a     b     c_bar q    tmp1 gnd paralleln3 mval={mval} Lval={Lval}
-  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3 mval={mval} Lval={Lval}
-  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3 mval={mval} Lval={Lval}
-  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 mval={mval} Lval={Lval}
-.ends
 
 .endl
