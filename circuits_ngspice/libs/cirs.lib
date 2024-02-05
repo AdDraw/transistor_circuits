@@ -105,33 +105,33 @@
   X1   b q s s_bar tg mval={mval} Lval={Lval}
 .ends
 
-.subckt XOR3 a b c q
-  .subckt serialp3 a b c top bot body
+.subckt XOR3 a b c q mval=N Lval=mos_Length
+  .subckt serialp3 a b c top bot body mval={mval} Lval={Lval}
     Mpt top  a  tmp1 body pmos L={Lval} W={2 * Lval} m={mval}
     Mpm tmp1 b  tmp2 body pmos L={Lval} W={2 * Lval} m={mval}
     Mpb tmp2 c  bot  body pmos L={Lval} W={2 * Lval} m={mval}
   .ends
 
-  .subckt paralleln3 a b c top bot body
+  .subckt paralleln3 a b c top bot body mval={mval} Lval={Lval}
     Mpt top a bot body nmos L={Lval} W={2 * Lval} m={mval}
     Mpm top b bot body nmos L={Lval} W={2 * Lval} m={mval}
     Mpb top c bot body nmos L={Lval} W={2 * Lval} m={mval}
   .ends
 
   * INPUT INVERTERS
-  Xinv0 a a_bar inv mval={mval} Lval={Lval}
-  Xinv1 b b_bar inv mval={mval} Lval={Lval}
-  Xinv2 c c_bar inv mval={mval} Lval={Lval}
+  Xinv0 a  a_bar                     inv mval={mval} Lval={Lval}
+  Xinv1 b  b_bar                     inv mval={mval} Lval={Lval}
+  Xinv2 c  c_bar                     inv mval={mval} Lval={Lval}
   * PUN
-  X0 a     b     c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X1 a     b_bar c     vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X2 a_bar b     c     vdd q vdd serialp3 mval={mval} Lval={Lval}
-  X3 a_bar b_bar c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X0 a     b     c_bar vdd  q    vdd serialp3
+  X1 a     b_bar c     vdd  q    vdd serialp3
+  X2 a_bar b     c     vdd  q    vdd serialp3
+  X3 a_bar b_bar c_bar vdd  q    vdd serialp3
   * PDN
-  X4 a     b     c_bar q    tmp1 gnd paralleln3 mval={mval} Lval={Lval}
-  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3 mval={mval} Lval={Lval}
-  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3 mval={mval} Lval={Lval}
-  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 mval={mval} Lval={Lval}
+  X4 a     b     c_bar q    tmp1 gnd paralleln3
+  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3
+  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3
+  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3
 .ends
 
 .subckt tg in out en nen mval=N Lval=mos_Length
@@ -223,20 +223,6 @@
   X_slave mq_bar en nen sq q d_latch mval={mval} Lval={Lval}
 .ends dffr
 
-.subckt dffrls d s en nen q mval=N Lval=mos_Length
-  * Master (active low)
-  X_master d s nen en mq mq_bar d_latch_alt1 mval={mval} Lval={Lval}
-  * Slave (active high)
-  X_slave mq_bar s en nen sq q d_latch_alt2 mval={mval} Lval={Lval}
-.ends dffrls
-
-.subckt dffrhr d r en nen q mval=N Lval=mos_Length
-  * Master (active low)
-  X_master d r nen en mq mq_bar d_latch_alt3 mval={mval} Lval={Lval}
-  * Slave (active high)
-  X_slave mq_bar r en nen sq q d_latch_alt4 mval={mval} Lval={Lval}
-.ends dffrhr
-
 .subckt dfff d en nen q mval=N Lval=mos_Length
   * Master (active high)
   X_master d en nen mq mq_bar d_latch mval={mval} Lval={Lval}
@@ -244,12 +230,28 @@
   X_slave mq_bar nen en sq q d_latch mval={mval} Lval={Lval}
 .ends dfff
 
+* LOW SET
+.subckt dffrls d s en nen q mval=N Lval=mos_Length
+  * Master (active low)
+  X_master d s nen en mq mq_bar d_latch_alt1 mval={mval} Lval={Lval}
+  * Slave (active high)
+  X_slave mq_bar s en nen sq q d_latch_alt2 mval={mval} Lval={Lval}
+.ends dffrls
+
 .subckt dfffls d s en nen q mval=N Lval=mos_Length
   * Master (active high)
   X_master d s en nen mq mq_bar d_latch_alt1 mval={mval} Lval={Lval}
   * Slave (active low)
   X_slave mq_bar s nen en sq q d_latch_alt2 mval={mval} Lval={Lval}
 .ends dfffls
+
+* HIGH RESET
+.subckt dffrhr d r en nen q mval=N Lval=mos_Length
+  * Master (active low)
+  X_master d r nen en mq mq_bar d_latch_alt3 mval={mval} Lval={Lval}
+  * Slave (active high)
+  X_slave mq_bar r en nen sq q d_latch_alt4 mval={mval} Lval={Lval}
+.ends dffrhr
 
 .subckt dfffhr d r en nen q mval=N Lval=mos_Length
   * Master (active high)
