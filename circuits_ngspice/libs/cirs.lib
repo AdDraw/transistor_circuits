@@ -1,0 +1,256 @@
+* simple circuits as subckts
+.lib circuits_LVL_14
+.param N=1
+.param mos_Length = 50n
+.model nmos nmos level=14 version=4.8.2
+.model pmos pmos level=14 version=4.8.2
+
+.subckt inv in out mval=N Lval=mos_Length
+  M1 out in vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 out in gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends inv
+
+.subckt buf in out mval=N Lval=mos_Length
+  X0 in     in_bar inv mval={mval} Lval={Lval}
+  X1 in_bar out    inv mval={mval} Lval={Lval}
+.ends buf
+
+.subckt nand2 in1 in2 out mval=N Lval=mos_Length
+  * PUN
+  M1 out in1 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 out in2 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M3 out in1 tmp gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M4 tmp in2 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends nand2
+
+.subckt nand3 in1 in2 in3 out mval=N Lval=mos_Length
+  * PUN
+  M1 out in1 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 out in2 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M3 out in3 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M4 out  in1 tmp  gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M5 tmp  in2 tmp2 gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M6 tmp2 in3 gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends nand3
+
+.subckt nor2 in1 in2 out mval=N Lval=mos_Length
+  * PUN
+  M1 out in1 tmp vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 tmp in2 vdd vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M3 out in1 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M4 out in2 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends nor2
+
+.subckt nor3 in1 in2 in3 out mval=N Lval=mos_Length
+  * PUN
+  M1 out  in1 tmp  vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 tmp  in2 tmp2 vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M3 tmp2 in3 vdd  vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M4 out in1 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M5 out in2 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M6 out in3 gnd gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends nor3
+
+.subckt xor2_nand A B Q mval=N Lval=mos_Length
+  X1 A B AB_bar nand2 mval={mval} Lval={Lval}
+  X2 A AB_bar tmp1 nand2 mval={mval} Lval={Lval}
+  X3 B AB_bar tmp2 nand2 mval={mval} Lval={Lval}
+  X4 tmp1 tmp2 Q nand2 mval={mval} Lval={Lval}
+.ends xor2_nand
+
+.subckt xor2_nor A B Q mval=N Lval=mos_Length
+  X1 A B Q1 nor2 mval={mval} Lval={Lval}
+  X2 A Q1 Q2 nor2 mval={mval} Lval={Lval}
+  X3 B Q1 Q3 nor2 mval={mval} Lval={Lval}
+  X4 Q3 Q2 Q4 nor2 mval={mval} Lval={Lval}
+  X5 Q4 Q4 Q nor2 mval={mval} Lval={Lval}
+.ends xor2_nor
+
+.subckt xor2_tran A A_bar B B_bar Q mval=N Lval=mos_Length
+  * PUN
+  M1 vdd  A     tmp0 vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 vdd  B     tmp0 vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M3 tmp0 A_bar Q    vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M4 tmp0 B_bar Q    vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M5 Q    A     tmp1 gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M6 tmp1 B     gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M7 Q    A_bar tmp2 gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M8 tmp2 B_bar gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends xor2_tran
+
+.subckt xor2_tran_opt A A_bar B B_bar Q mval=N Lval=mos_Length
+  * PUN
+  M1 vdd  A     tmp1 vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 tmp1 B_bar Q    vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M3 vdd  A_bar tmp2 vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M4 tmp2 B     Q    vdd pmos L={Lval} W={2 * Lval} m={mval}
+  * PDN
+  M5 Q    A     tmp3 gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M6 tmp3 B     gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M7 Q    A_bar tmp4 gnd nmos L={Lval} W={2 * Lval} m={mval}
+  M8 tmp4 B_bar gnd  gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends xor2_tran_opt
+
+.subckt tg in out en nen mval=N Lval=mos_Length
+  M1 in nen out vdd pmos L={Lval} W={2 * Lval} m={mval}
+  M2 in en  out gnd nmos L={Lval} W={2 * Lval} m={mval}
+.ends tg
+
+.subckt d_latch d en nen q q_bar mval=N Lval=mos_Length
+  X0 d     q     en  nen tg  mval={mval} Lval={Lval}
+  X1 q     q_bar         inv mval={mval} Lval={Lval}
+  X2 q_bar q2            inv mval={mval} Lval={Lval}
+  X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
+.ends d_latch
+
+
+.subckt d_latch_alt1 d s en nen q q_bar mval=N Lval=mos_Length
+  X0 d     q     en  nen tg  mval={mval} Lval={Lval}
+  X1 q     q_bar         inv mval={mval} Lval={Lval}
+  X2 s q_bar q2          nand2 mval={mval} Lval={Lval}
+  X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
+.ends d_latch_alt1
+
+.subckt d_latch_alt3 d r en nen q q_bar mval=N Lval=mos_Length
+  X0 d     q     en  nen tg  mval={mval} Lval={Lval}
+  X1 q     q_bar         inv mval={mval} Lval={Lval}
+  X2 r q_bar q2          nor2 mval={mval} Lval={Lval}
+  X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
+.ends d_latch_alt3
+
+.subckt d_latch_alt2 d s en nen q q_bar mval=N Lval=mos_Length
+  X0 d  q  en  nen       tg mval={mval} Lval={Lval}
+  X1 s q   q_bar         nand2 mval={mval} Lval={Lval}
+  X2 q_bar q2            inv mval={mval} Lval={Lval}
+  X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
+.ends d_latch_alt2
+
+.subckt d_latch_alt4 d r en nen q q_bar mval=N Lval=mos_Length
+  X0 d  q  en  nen       tg mval={mval} Lval={Lval}
+  X1 r q   q_bar         nor2 mval={mval} Lval={Lval}
+  X2 q_bar q2            inv mval={mval} Lval={Lval}
+  X3 q2    q     nen en  tg  mval={mval} Lval={Lval}
+.ends d_latch_alt4
+
+.subckt d_latch_with_async_reset_active_low d r en nen q q_bar mval=N Lval=mos_Length
+  X0 d r norq nand2       mval={mval} Lval={Lval}
+  X1 norq q en nen tg     mval={mval} Lval={Lval}
+  X2 q q_bar inv          mval={mval} Lval={Lval}
+  X3 q_bar r norq2 nand2  mval={mval} Lval={Lval}
+  X4 norq2 q nen en tg    mval={mval} Lval={Lval}
+.ends d_latch_with_async_reset_active_low
+
+.subckt d_latch_with_async_set_active_high d s en nen q q_bar mval=N Lval=mos_Length
+  X0 d s norq nor2        mval={mval} Lval={Lval}
+  X1 norq q en nen tg     mval={mval} Lval={Lval}
+  X2 q q_bar inv          mval={mval} Lval={Lval}
+  X3 q_bar s norq2 nor2   mval={mval} Lval={Lval}
+  X4 norq2 q nen en tg    mval={mval} Lval={Lval}
+.ends d_latch_with_async_set_active_high
+
+.subckt d_latch_async_ctrl_active_high d q q_bar en nen ctrl z mval=N Lval=mos_Length
+  * z- if 1 then SET, 0 - RESET
+  Xmux0 d z ctrl mux0out mux21 mval={mval} Lval={Lval}
+  Xtg0  mux0out q en nen tg mval={mval} Lval={Lval}
+  Xinv0 q q_bar inv mval={mval} Lval={Lval}
+  Xinv1 q_bar tmp inv mval={mval} Lval={Lval}
+  Xmux1 tmp z ctrl mux1out mux21 mval={mval} Lval={Lval}
+  Xtg1  mux1out q nen en tg mval={mval} Lval={Lval}
+.ends
+
+.subckt d_latch_async_ctrl_active_low d q q_bar en nen ctrl z mval=N Lval=mos_Length
+  * z- if 1 then SET, 0 - RESET
+  Xmux0 z d ctrl mux0out mux21 mval={mval} Lval={Lval}
+  Xtg0  mux0out q en nen tg mval={mval} Lval={Lval}
+  Xinv0 q q_bar inv mval={mval} Lval={Lval}
+  Xinv1 q_bar tmp inv mval={mval} Lval={Lval}
+  Xmux1 z tmp ctrl mux1out mux21 mval={mval} Lval={Lval}
+  Xtg1  mux1out q nen en tg mval={mval} Lval={Lval}
+.ends
+
+.subckt dffr d en nen q mval=N Lval=mos_Length
+  * Master (active low)
+  X_master d nen en mq mq_bar d_latch mval={mval} Lval={Lval}
+  * Slave (active high)
+  X_slave mq_bar en nen sq q d_latch mval={mval} Lval={Lval}
+.ends dffr
+
+.subckt dffrls d s en nen q mval=N Lval=mos_Length
+  * Master (active low)
+  X_master d s nen en mq mq_bar d_latch_alt1 mval={mval} Lval={Lval}
+  * Slave (active high)
+  X_slave mq_bar s en nen sq q d_latch_alt2 mval={mval} Lval={Lval}
+.ends dffrls
+
+.subckt dffrhr d r en nen q mval=N Lval=mos_Length
+  * Master (active low)
+  X_master d r nen en mq mq_bar d_latch_alt3 mval={mval} Lval={Lval}
+  * Slave (active high)
+  X_slave mq_bar r en nen sq q d_latch_alt4 mval={mval} Lval={Lval}
+.ends dffrhr
+
+.subckt dfff d en nen q mval=N Lval=mos_Length
+  * Master (active high)
+  X_master d en nen mq mq_bar d_latch mval={mval} Lval={Lval}
+  * Slave (active low)
+  X_slave mq_bar nen en sq q d_latch mval={mval} Lval={Lval}
+.ends dfff
+
+.subckt dfffls d s en nen q mval=N Lval=mos_Length
+  * Master (active high)
+  X_master d s en nen mq mq_bar d_latch_alt1 mval={mval} Lval={Lval}
+  * Slave (active low)
+  X_slave mq_bar s nen en sq q d_latch_alt2 mval={mval} Lval={Lval}
+.ends dfffls
+
+.subckt dfffhr d r en nen q mval=N Lval=mos_Length
+  * Master (active high)
+  X_master d r en nen mq mq_bar d_latch_alt3 mval={mval} Lval={Lval}
+  * Slave (active low)
+  X_slave mq_bar r nen en sq q d_latch_alt4 mval={mval} Lval={Lval}
+.ends dfffhr
+
+
+.subckt MUX21 a b s q mval=N Lval=mos_Length
+  Xinv s s_bar inv mval={mval} Lval={Lval}
+  X0   a q s_bar s tg mval={mval} Lval={Lval}
+  X1   b q s s_bar tg mval={mval} Lval={Lval}
+.ends
+
+
+** XOR3 lib
+.subckt serialp3 a b c top bot body
+  Mpt top  a  tmp1 body pmos L={Lval} W={2 * Lval} m={mval}
+  Mpm tmp1 b  tmp2 body pmos L={Lval} W={2 * Lval} m={mval}
+  Mpb tmp2 c  bot  body pmos L={Lval} W={2 * Lval} m={mval}
+.ends
+
+.subckt paralleln3 a b c top bot body
+  Mpt top a bot body nmos L={Lval} W={2 * Lval} m={mval}
+  Mpm top b bot body nmos L={Lval} W={2 * Lval} m={mval}
+  Mpb top c bot body nmos L={Lval} W={2 * Lval} m={mval}
+.ends
+
+.subckt XOR3 a b c q
+  * INPUT INVERTERS
+  Xinv0 a a_bar inv mval={mval} Lval={Lval}
+  Xinv1 b b_bar inv mval={mval} Lval={Lval}
+  Xinv2 c c_bar inv mval={mval} Lval={Lval}
+  * PUN
+  X0 a     b     c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X1 a     b_bar c     vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X2 a_bar b     c     vdd q vdd serialp3 mval={mval} Lval={Lval}
+  X3 a_bar b_bar c_bar vdd q vdd serialp3 mval={mval} Lval={Lval}
+  * PDN
+  X4 a     b     c_bar q    tmp1 gnd paralleln3 mval={mval} Lval={Lval}
+  X5 a     b_bar c     tmp1 tmp2 gnd paralleln3 mval={mval} Lval={Lval}
+  X6 a_bar b     c     tmp2 tmp3 gnd paralleln3 mval={mval} Lval={Lval}
+  X7 a_bar b_bar c_bar tmp3 gnd  gnd paralleln3 mval={mval} Lval={Lval}
+.ends
+
+.endl
